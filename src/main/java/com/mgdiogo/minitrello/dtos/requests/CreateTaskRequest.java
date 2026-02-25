@@ -1,15 +1,17 @@
-package com.mgdiogo.minitrello.dtos;
+package com.mgdiogo.minitrello.dtos.requests;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+@Data
 @Getter
 @Setter
 @AllArgsConstructor
-public class CreateTaskDTO {
+public class CreateTaskRequest {
 	private Long taskId;
 
 	@NotBlank(message = "Title is required")

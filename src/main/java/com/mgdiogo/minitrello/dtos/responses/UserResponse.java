@@ -1,6 +1,7 @@
-package com.mgdiogo.minitrello.dtos;
+package com.mgdiogo.minitrello.dtos.responses;
 
 import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,8 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetUserDTO {
+public class UserResponse {
 	private Long userId;
 	private String email;
-	private List<CreateTaskDTO> tasks;
+	private List<TaskResponse> tasks;
 }

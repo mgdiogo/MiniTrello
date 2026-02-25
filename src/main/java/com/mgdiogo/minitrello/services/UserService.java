@@ -1,15 +1,16 @@
 package com.mgdiogo.minitrello.services;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import com.mgdiogo.minitrello.dtos.CreateTaskDTO;
-import com.mgdiogo.minitrello.dtos.CreateUserDTO;
-import com.mgdiogo.minitrello.dtos.GetUserDTO;
+import com.mgdiogo.minitrello.dtos.responses.TaskResponse;
+import com.mgdiogo.minitrello.dtos.requests.CreateUserRequest;
+import com.mgdiogo.minitrello.dtos.responses.UserResponse;
 import com.mgdiogo.minitrello.entities.UserEntity;
+import com.mgdiogo.minitrello.exceptions.ConflictException;
 import com.mgdiogo.minitrello.repositories.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
@@ -22,27 +23,38 @@ public class UserService {
 
 	private final TaskService taskService;
 	private final UserRepository userRepository;
+	private final BCryptPasswordEncoder passwordEncoder;
 
-	public List<GetUserDTO> findAllUsers() {
+	public List<UserResponse> findAllUsers() {
 		List<UserEntity> users = userRepository.findAll();
 
 		return users.stream().map(this::userEntityToDTO).toList();
 	}
 
-	public CreateUserDTO createUser(CreateUserDTO userDTO) {
-		String email = userDTO.getEmail().toLowerCase();
-
-		if (userRepository.existsByEmail(email)) {
-			throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already registered");
+	public UserResponse createUser(CreateUserRequest userDTO) {
+		try {
+			String email = userDTO.getEmail().toLowerCase();
+			
+			UserEntity user = new UserEntity();
+			user.setEmail(email);
+			
+			String hashedPassword = passwordEncoder.encode(userDTO.getPassword());
+			user.setPassword(hashedPassword);
+			
+			UserEntity createdUser = userRepository.save(user);
+	
+			return userEntityToDTO(createdUser);
+		} catch (DataIntegrityViolationException e) {
+			throw new ConflictException("Email already registered");
 		}
 	}
 
-	private GetUserDTO userEntityToDTO(UserEntity user) {
-		List<CreateTaskDTO> tasks = user.getTasks() == null ? new ArrayList<>() : user.getTasks()
+	private UserResponse userEntityToDTO(UserEntity user) {
+		List<TaskResponse> tasks = user.getTasks() == null ? new ArrayList<>() : user.getTasks()
 			.stream()
 			.map(taskService::taskEntityToDTO)
 			.toList();
 
-		return new GetUserDTO(user.getUserId(), user.getEmail(), tasks);
+		return new UserResponse(user.getUserId(), user.getEmail(), tasks);
 	}
 }
