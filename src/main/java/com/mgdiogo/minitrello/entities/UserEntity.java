@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.List;
 
+import com.mgdiogo.minitrello.security.UserRole;
+
 @Entity
 @Table(name="users")
 @NoArgsConstructor
@@ -27,4 +29,6 @@ public class UserEntity {
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<TaskEntity> tasks;
+
+	private UserRole role;
 }

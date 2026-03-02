@@ -10,4 +10,5 @@ import lombok.Setter;
 public class LoginResponse {
 	private Long userId;
 	private String email;
+	private String token;
 }
