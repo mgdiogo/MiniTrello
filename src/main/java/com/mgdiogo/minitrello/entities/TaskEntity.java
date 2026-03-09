@@ -2,6 +2,8 @@ package com.mgdiogo.minitrello.entities;
 
 import java.time.LocalDateTime;
 
+import com.mgdiogo.minitrello.enums.TaskStatus;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,7 +26,8 @@ public class TaskEntity {
 
 	private String description;
 
-	private boolean completed = false;
+	@Enumerated(EnumType.STRING)
+	private TaskStatus status;
 
 	private LocalDateTime createdAt = LocalDateTime.now();
 

@@ -15,7 +15,7 @@ public class TaskService {
             task.getTitle(),
             task.getDescription(),
 			task.getCreatedAt(),
-            task.isCompleted()
+            task.getStatus()
     	);
 	}
 }

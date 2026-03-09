@@ -1,4 +1,4 @@
-package com.mgdiogo.minitrello.security;
+package com.mgdiogo.minitrello.enums;
 
 import lombok.Getter;
 

@@ -2,6 +2,8 @@ package com.mgdiogo.minitrello.dtos.responses;
 
 import java.time.LocalDateTime;
 
+import com.mgdiogo.minitrello.enums.TaskStatus;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,5 +16,5 @@ public class TaskResponse {
 	private String title;
 	private String description;
 	private LocalDateTime createdAt;
-	private boolean completed;
+	private TaskStatus status;
 }
