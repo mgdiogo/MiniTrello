@@ -5,8 +5,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mgdiogo.minitrello.dtos.requests.CreateUserRequest;
 import com.mgdiogo.minitrello.dtos.requests.LoginRequest;
 import com.mgdiogo.minitrello.dtos.responses.LoginResponse;
+import com.mgdiogo.minitrello.dtos.responses.UserResponse;
 import com.mgdiogo.minitrello.services.AuthService;
 
 import jakarta.validation.Valid;
@@ -21,5 +23,11 @@ public class AuthController {
 	@PostMapping("/login")
 	public LoginResponse loginUser(@Valid @RequestBody LoginRequest loginRequest) {
 		return authService.loginUser(loginRequest);
+	}
+
+	// Handles user registration
+	@PostMapping("/register")
+	public UserResponse createUser(@Valid @RequestBody CreateUserRequest userDto) {
+		return authService.createUser(userDto);
 	}
 }

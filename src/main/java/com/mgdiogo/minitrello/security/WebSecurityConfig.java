@@ -24,8 +24,11 @@ public class WebSecurityConfig {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.formLogin(form -> form.disable())
 				.authorizeHttpRequests(auth -> auth
-						.requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
-						.anyRequest().authenticated());
+					.requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
+					.requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
+					.requestMatchers(HttpMethod.GET, "/error").permitAll()
+					.anyRequest().authenticated()
+				);
 
 		return http.build();
 	}

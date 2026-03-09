@@ -27,6 +27,7 @@ public class TaskEntity {
 	private String description;
 
 	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
 	private TaskStatus status;
 
 	private LocalDateTime createdAt = LocalDateTime.now();

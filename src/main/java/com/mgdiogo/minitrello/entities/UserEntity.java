@@ -31,5 +31,6 @@ public class UserEntity {
 	private List<TaskEntity> tasks;
 	
 	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
 	private UserRole role;
 }
