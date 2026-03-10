@@ -1,5 +1,7 @@
 package com.mgdiogo.minitrello.dtos.requests;
 
+import com.mgdiogo.minitrello.enums.TaskStatus;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -21,5 +23,5 @@ public class CreateTaskRequest {
 	@Size(max = 100, message = "Description should not have more than 100 characters")
 	private String description;
 
-	private boolean completed;
+	private TaskStatus status;
 }
