@@ -8,7 +8,11 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.security.authentication.BadCredentialsException;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -41,4 +45,21 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(request, HttpStatus.CONFLICT);
 	}
 
+	// Throws custom unauthorized error
+	@ExceptionHandler(BadCredentialsException.class)
+	public ResponseEntity<ErrorTemplate> handleBadCredentials(BadCredentialsException badCredentials) {
+		ErrorTemplate request = new ErrorTemplate(LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value(), "Unauthorized",
+				"Invalid email or password");
+
+		return new ResponseEntity<>(request, HttpStatus.UNAUTHORIZED);
+	}
+
+	// Catches any unhandled exceptions and returns a generic error response
+	@ExceptionHandler(Exception.class) // catch-all — always have this
+	public ResponseEntity<ErrorTemplate> handleUnexpected(Exception ex) {
+		log.error("Unexpected error", ex); // log the real cause server-side
+		ErrorTemplate error = new ErrorTemplate(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				"Internal Server Error", "An unexpected error occurred. Please try again later.");
+		return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }
