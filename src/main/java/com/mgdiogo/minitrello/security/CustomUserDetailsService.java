@@ -1,4 +1,4 @@
-package com.mgdiogo.minitrello.services;
+package com.mgdiogo.minitrello.security;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.mgdiogo.minitrello.entities.UserEntity;
 import com.mgdiogo.minitrello.repositories.UserRepository;
-import com.mgdiogo.minitrello.security.CustomUserDetails;
 
 import lombok.RequiredArgsConstructor;
 
