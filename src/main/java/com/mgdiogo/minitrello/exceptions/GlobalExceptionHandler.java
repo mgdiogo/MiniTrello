@@ -9,6 +9,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import com.mgdiogo.minitrello.dtos.responses.ErrorResponse;
 
@@ -30,6 +31,23 @@ public class GlobalExceptionHandler {
 		ErrorResponse error = new ErrorResponse(LocalDateTime.now().format(FORMATTER), HttpStatus.BAD_REQUEST.value(), "Bad Request",
 				message);
 		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+	}
+
+	// Throws error when an endpoint is not found
+	@ExceptionHandler(NoHandlerFoundException.class)
+	public ResponseEntity<ErrorResponse> handleNoHandlerFound(NoHandlerFoundException ex) {
+		ErrorResponse error = new ErrorResponse(LocalDateTime.now().format(FORMATTER),HttpStatus.NOT_FOUND.value(),"Not Found",
+			"Endpoint not found"
+		);
+		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+	}
+
+	// Throws error when data inside a valid endpoint is not found
+	@ExceptionHandler(ResourceNotFoundException.class)
+	public ResponseEntity<ErrorResponse> handleNotFound(ResourceNotFoundException notFound) {
+		ErrorResponse request = new ErrorResponse(LocalDateTime.now().format(FORMATTER), HttpStatus.NOT_FOUND.value(), "Not Found",
+				notFound.getMessage());
+		return new ResponseEntity<>(request, HttpStatus.NOT_FOUND);
 	}
 
 	// Throws custom bad request error

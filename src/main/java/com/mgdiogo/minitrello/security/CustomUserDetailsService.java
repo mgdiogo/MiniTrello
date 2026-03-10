@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class CustomUserDetailsService implements UserDetailsService {
 	private final UserRepository userRepository;
 
-		@Override
+	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		UserEntity user = userRepository.findOneByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User does not exist"));
 

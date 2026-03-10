@@ -10,25 +10,45 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import jakarta.servlet.http.HttpServletResponse;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig {
+	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
 	// Handles which requests are allowed in determined routes
 	// All requests are allowed for now, to be implemented
 	@Bean
-	public SecurityFilterChain applicationSecurity(HttpSecurity http) {
+	public SecurityFilterChain applicationSecurity(HttpSecurity http) throws Exception {
 		http
 				.csrf(csrf -> csrf.disable())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.formLogin(form -> form.disable())
+				.exceptionHandling(ex -> ex
+					.authenticationEntryPoint((request, response, authException) -> {
+						response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+						response.getWriter().write("Unauthorized");
+					})
+					.accessDeniedHandler((request, response, accessDeniedException) -> {
+						response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+						response.getWriter().write("Forbidden");
+					})
+            	)
 				.authorizeHttpRequests(auth -> auth
-					.requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
 					.requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
-					.requestMatchers(HttpMethod.GET, "/error").permitAll()
-					.anyRequest().authenticated()
-				);
+					.requestMatchers("/error").permitAll()
+
+					.requestMatchers("/users/**").hasRole("ADMIN")
+					.requestMatchers("/test").authenticated()
+					.anyRequest().permitAll()
+				)
+				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}

@@ -1,5 +1,7 @@
 package com.mgdiogo.minitrello.services;
 
+import java.util.Map;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,6 +17,7 @@ import com.mgdiogo.minitrello.enums.UserRole;
 import com.mgdiogo.minitrello.exceptions.ConflictException;
 import com.mgdiogo.minitrello.repositories.UserRepository;
 import com.mgdiogo.minitrello.security.CustomUserDetails;
+import com.mgdiogo.minitrello.security.JwtService;
 import com.mgdiogo.minitrello.utility.UserMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -26,6 +29,8 @@ public class AuthService {
 	private final BCryptPasswordEncoder passwordEncoder;
 	private final AuthenticationManager authenticationManager;
 	private final UserRepository userRepository;
+	private final JwtService jwtService;
+
 
 	public LoginResponse loginUser(LoginRequest request) {
 		UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
@@ -33,7 +38,7 @@ public class AuthService {
 
 		CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
 
-		String token = null;
+		String token = jwtService.generateToken(Map.of("extra-claims", user.getAuthorities()), user);
 
 		return new LoginResponse(
 			user.getUserId(),
