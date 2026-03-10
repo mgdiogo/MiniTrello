@@ -28,7 +28,7 @@ public class JwtService {
     ) {
         return Jwts
             .builder()
-            .claims(extraClaims)
+            .claims().add(extraClaims).and()
             .subject(userDetails.getUsername())
             .issuedAt(new Date(System.currentTimeMillis()))
             .expiration(new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1)))

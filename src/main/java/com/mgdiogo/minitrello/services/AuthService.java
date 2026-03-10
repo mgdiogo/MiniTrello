@@ -1,10 +1,12 @@
 package com.mgdiogo.minitrello.services;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +40,12 @@ public class AuthService {
 
 		CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
 
-		String token = jwtService.generateToken(Map.of("extra-claims", user.getAuthorities()), user);
+		List<String> roles = user.getAuthorities()
+			.stream()
+			.map(GrantedAuthority::getAuthority)
+			.toList();
+
+		String token = jwtService.generateToken(Map.of("roles", roles), user);
 
 		return new LoginResponse(
 			user.getUserId(),
