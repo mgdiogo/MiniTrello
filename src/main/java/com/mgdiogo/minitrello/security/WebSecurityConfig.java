@@ -12,6 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.mgdiogo.minitrello.utility.ErrorMessage;
+
 import jakarta.servlet.http.HttpServletResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
+	private final ErrorMessage errorMessage;
 
 	// Handles which requests are allowed in determined routes
 	// All requests are allowed for now, to be implemented
@@ -32,12 +35,16 @@ public class WebSecurityConfig {
 				.formLogin(form -> form.disable())
 				.exceptionHandling(ex -> ex
 					.authenticationEntryPoint((request, response, authException) -> {
+						String body = errorMessage.setBody(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized", "Authentication required");
 						response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-						response.getWriter().write("Unauthorized");
+						response.setContentType("application/json");
+						response.getWriter().write(body);
 					})
 					.accessDeniedHandler((request, response, accessDeniedException) -> {
+						String body = errorMessage.setBody(HttpServletResponse.SC_FORBIDDEN, "Forbidden", "Access denied");
 						response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-						response.getWriter().write("Forbidden");
+						response.setContentType("application/json");
+						response.getWriter().write(body);
 					})
             	)
 				.authorizeHttpRequests(auth -> auth
