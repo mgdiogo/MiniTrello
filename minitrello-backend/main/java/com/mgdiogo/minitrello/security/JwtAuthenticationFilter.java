@@ -43,6 +43,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             final String email = jwtService.getUsername(jwt);
     
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                // todo - refactor to avoid querying database on every request
+                //      - will do something like blacklisting JWTs on logout/role change
+                
                 CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(email);
     
                 if (jwtService.isTokenValid(jwt, userDetails)) {

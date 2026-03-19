@@ -46,3 +46,19 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['minitrello-backend/main/java']
+        }
+        resources {
+            srcDirs = ['minitrello-backend/main/resources']
+        }
+    }
+    test {
+        java {
+            srcDirs = ['minitrello-backend/test/java']
+        }
+    }
+}
