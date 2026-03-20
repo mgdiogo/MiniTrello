@@ -1,15 +1,14 @@
-import { useLayoutEffect, useState } from "react"
+import { useState } from "react"
 import { Link } from "react-router-dom"
 import axios from "axios"
+import usePageTitle from "../hooks/PageTitle"
 
 
 export default function HomePage() {
+    usePageTitle("MiniTrello - Start Organizing Yourself!");
+
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-
-    useLayoutEffect(() => {
-        document.title = "MiniTrello - Start Organizing Yourself!"
-    }, [])
 
     async function handleSubmit(e: React.SubmitEvent) {
         e.preventDefault();
@@ -17,10 +16,12 @@ export default function HomePage() {
         try {
             const response = await axios.post("/api/auth/login", { email, password });
             
-            console.log(response.data);
+            console.log(response?.data);
         } catch (error) {
             if (axios.isAxiosError(error))
                 console.error("Login failed:", error.response?.data.message || error.message);
+            else 
+                console.error("An unexpected error occurred:", error);
         }
     }
 
@@ -29,7 +30,7 @@ export default function HomePage() {
             <div className="login-page">
                 <div className="login-container">
                     <form onSubmit={handleSubmit}>
-                        <h1>Login</h1>
+                        <img className="login-container-logo" src="/src/assets/logo-full.svg" alt="MiniTrelloLogin" />
                         <div className="form-group">
                             <input className="form-input" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                         </div>

@@ -1,4 +1,6 @@
 :root {
+
+  /* Global Styles */
   * {
     margin: 0;
     padding: 0;
@@ -10,6 +12,19 @@
   .body {
     background-color: #f2f2f2;
   }
+
+  .a {
+    text-decoration: none;
+    color: #348dfc;
+    font-weight: 400;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #035fd2;
+    }
+  }
+
+  /* Login Page Styles */
 
   .login-page {
     min-height: 100vh;
@@ -23,9 +38,9 @@
 
   .login-container {
     max-width: 540px;
-    width: 100%;
+    width: 85%;
     background-color: #fff;
-    padding: 2rem;
+    padding: 3rem;
     border-radius: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   }
@@ -34,6 +49,15 @@
     text-align: center;
     padding: 1rem;
   }
+
+  .login-container-logo {
+    display: block;
+    margin: 0 auto 1rem auto;
+    width: 240px;
+    max-width: 100%;
+  }
+
+  /* Form Styles */
 
   .form-group {
     text-align: center;
@@ -50,22 +74,11 @@
     transition: border-color 0.2s ease;
 
     &:focus {
-      border-color: #4a90e2;
+      border-color: #348dfc;
     }
 
     &:hover {
-      border-color: #4a90e2;
-    }
-  }
-
-  .a {
-    text-decoration: none;
-    color: #4a90e2;
-    font-weight: 400;
-    transition: color 0.2s ease;
-
-    &:hover {
-      color: #357ab8;
+      border-color: #348dfc;
     }
   }
 
@@ -74,9 +87,11 @@
     padding: 0 1.5rem;
   }
 
+   /* Button Styles */
+
   .button-submit {
     text-align: center;
-    padding: 1rem;
+    padding-top: 2rem;
   }
 
   .button-primary {
@@ -91,7 +106,7 @@
     transition: background-color 0.2s ease;
 
     &:hover {
-      background-color: #357ab8;
+      background-color: #035fd2;
     }
   }
 }
