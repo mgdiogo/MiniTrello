@@ -4,7 +4,7 @@ import axios from "axios"
 import usePageTitle from "../hooks/PageTitle"
 
 
-export default function HomePage() {
+export default function LoginPage() {
     usePageTitle("MiniTrello - Start Organizing Yourself!");
 
     const [email, setEmail] = useState("")
