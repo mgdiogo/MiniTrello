@@ -1,0 +1,9 @@
+import { Navigate, Outlet } from "react-router-dom"
+import useAuth from "../hooks/AuthHook"
+
+
+export default function ProtectedRoute() {
+  const { isAuthenticated } = useAuth()
+
+  return isAuthenticated ? <Navigate to="/dashboard" replace />  : <Outlet />
+}

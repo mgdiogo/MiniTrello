@@ -1,27 +1,29 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import usePageTitle from "../hooks/PageTitleHook"
+import useAuth from "../hooks/AuthHook"
 import axios from "axios"
-import usePageTitle from "../hooks/PageTitle"
+import axiosInstance from "../api/AxiosConfig"
 
 
 export default function LoginPage() {
-    usePageTitle("MiniTrello - Start Organizing Yourself!");
-
+    usePageTitle("MiniTrello - Start Organizing Yourself!")
+    const { login } = useAuth()
+    const navigate = useNavigate()
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
     async function handleSubmit(e: React.SubmitEvent) {
-        e.preventDefault();
+        e.preventDefault()
 
         try {
-            const response = await axios.post("/api/auth/login", { email, password });
+            const response = await axiosInstance.post("/api/auth/login", { email, password })
             
-            console.log(response?.data);
+            login(response.data)
+            navigate("/dashboard")
         } catch (error) {
             if (axios.isAxiosError(error))
-                console.error("Login failed:", error.response?.data.message || error.message);
-            else 
-                console.error("An unexpected error occurred:", error);
+                console.error("Login failed:", error.response?.data.message || error.message)
         }
     }
 

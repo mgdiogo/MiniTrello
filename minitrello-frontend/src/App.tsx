@@ -1,21 +1,37 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import LoginPage from './pages/LoginPage.tsx';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import LoginPage from './pages/LoginPage.tsx'
+import DashboardPage from './pages/DashboardPage.tsx'
+import { AuthProvider } from './context/AuthContext.tsx'
+import RootLayout from './components/RootLayout.tsx'
+import ProtectedRoute from './components/ProtectedRoute.tsx'
+import PublicRoute from './components/PublicRoute.tsx'
 
 const router = createBrowserRouter([
-  {/* Root route with a layout component will be declared here
-      Example declaration:
+  {
+    path: "/",
+    element: <RootLayout />,
+    children: [
       {
-        path: "/",
-        element: <RootLayout />,
+        element: <PublicRoute />,
         children: [
-          { element: <HomePage /> }
+          { index: true, element: <LoginPage /> }
+        ]
+      },
+      {
+        element: <ProtectedRoute />,
+        children: [
+          { path: "dashboard", element: <DashboardPage /> }
         ]
       }
-  */},
+    ]
+  }
 
-  { index: true, element: <LoginPage /> } // TODO: Check if user is logged in and either redirect to dashboard or show login page
-]);
+])
 
 export default function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  )
 }
