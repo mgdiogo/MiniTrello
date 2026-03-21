@@ -1,3 +1,10 @@
+import usePageTitle from "../hooks/PageTitleHook"
+
 export default function DashboardPage() {
-    return (<div>Dashboard</div>)
+    usePageTitle("Dashboard")
+    
+    return (
+        
+        <div>Dashboard</div>
+    )
 }

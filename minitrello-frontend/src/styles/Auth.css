@@ -1,0 +1,253 @@
+/* ── Background decorative blobs ── */
+.auth-bg {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    z-index: -10;
+    pointer-events: none;
+}
+
+.auth-bg-blob-top {
+    position: absolute;
+    top: -10%;
+    left: -5%;
+    width: 40%;
+    height: 40%;
+    border-radius: 9999px;
+    background-color: rgba(0, 90, 176, 0.10);
+    filter: blur(120px);
+}
+
+.auth-bg-blob-bottom {
+    position: absolute;
+    bottom: -10%;
+    right: -5%;
+    width: 35%;
+    height: 35%;
+    border-radius: 9999px;
+    background-color: rgba(183, 4, 68, 0.10);
+    filter: blur(120px);
+}
+
+/* ── Login Wrapper ── */
+.auth-wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ── Main canvas ── */
+.auth-main {
+    width: 100%;
+    max-width: 560px;
+}
+
+/* ── Brand section ── */
+.auth-brand {
+    margin-bottom: 2.5rem;
+    text-align: center;
+}
+
+.auth-brand-title {
+    font-family: var(--font-headline);
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--on-surface);
+    margin-bottom: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-brand-title-logo {
+    height: 1em;
+    margin-right: 0.25rem;
+}
+
+.auth-brand-subtitle {
+    color: var(--on-surface-variant);
+    font-weight: 500;
+}
+
+/* ── Card ── */
+.auth-card {
+    background-color: var(--surface-container-lowest);
+    border-radius: 2rem;
+    padding: 3rem 1.25rem;
+    box-shadow: 0 20px 40px rgba(33, 45, 81, 0.06);
+    border: 1px solid rgba(160, 172, 215, 0.1);
+}
+
+/* ── Form ── */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* ── Field group ── */
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.field-label {
+    font-family: var(--font-headline);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--on-surface-variant);
+    padding: 0 0.25rem;
+}
+
+.field-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 0.25rem;
+}
+
+.field-forgot {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.field-forgot:hover {
+    color: var(--primary-dim);
+}
+
+/* ── Input wrapper ── */
+.field-input-wrapper {
+    position: relative;
+}
+
+.field-icon {
+    width: 2rem;
+    height: 1.45rem;
+    position: absolute;
+    top: 50%;
+    left: 1rem;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.field-icon path {
+    fill: var(--on-surface);
+}
+
+.field-input {
+    width: 100%;
+    background-color: var(--surface-container-high);
+    border: none;
+    border-radius: var(--radius-lg);
+    padding: 1rem 1rem 1rem 4rem;
+    color: var(--on-surface);
+    font-size: 1rem;
+    font-family: var(--font-body);
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.field-input::placeholder {
+    color: var(--outline);
+}
+
+.field-input:focus {
+    box-shadow: 0 0 0 2px rgba(0, 90, 176, 0.2);
+    background-color: var(--surface-container-lowest);
+}
+
+/* ── Submit button ── */
+.auth-submit-wrapper {
+    padding-top: 1rem;
+}
+
+.auth-submit-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    background: linear-gradient(to right, var(--primary), var(--primary-container));
+    color: var(--on-primary);
+    font-family: var(--font-headline);
+    font-size: 1.125rem;
+    font-weight: 700;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: var(--radius-full);
+    box-shadow: 0 8px 24px rgba(0, 90, 176, 0.25);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.auth-submit-btn:hover {
+    box-shadow: 0 12px 32px rgba(0, 90, 176, 0.3);
+}
+
+.auth-submit-btn:active {
+    transform: scale(0.98);
+}
+
+/* ── Register link ── */
+.auth-register {
+    margin-top: 2rem;
+    text-align: center;
+    color: var(--on-surface-variant);
+    font-weight: 500;
+}
+
+.auth-register a {
+    color: var(--primary);
+    font-weight: 700;
+    text-decoration: none;
+    margin-left: 0.25rem;
+    text-underline-offset: 4px;
+    transition: all 0.2s ease;
+}
+
+.auth-register a:hover {
+    text-decoration: underline;
+}
+
+/* ── Decorative side shape (large screens only) ── */
+.auth-side-shape {
+    display: none;
+    position: fixed;
+    top: 50%;
+    right: -5%;
+    transform: translateY(-50%);
+    width: 300px;
+    height: 600px;
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+.auth-side-shape-inner {
+    width: 100%;
+    height: 100%;
+    background-color: var(--primary-container);
+    border-radius: 4rem;
+    rotate: 12deg;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+}
+
+@media (min-width: 1024px) {
+    .auth-side-shape {
+        display: block;
+    }
+
+    .auth-card {
+        padding: 3rem 2.5rem;
+    }
+}
