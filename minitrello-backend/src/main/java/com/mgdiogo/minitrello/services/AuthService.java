@@ -35,7 +35,7 @@ public class AuthService {
 
 
 	public LoginResponse loginUser(LoginRequest request) {
-		UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
+		UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(request.getEmail().toLowerCase().trim(), request.getPassword());
 		Authentication auth = this.authenticationManager.authenticate(usernamePassword);
 
 		CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
@@ -55,7 +55,7 @@ public class AuthService {
 	}
 
 	public UserResponse createUser(CreateUserRequest userDTO) {
-		String email = userDTO.getEmail().toLowerCase();
+		String email = userDTO.getEmail().toLowerCase().trim();
 		
 		if (userRepository.existsByEmail(email))
 			throw new ConflictException("Email already registered");
