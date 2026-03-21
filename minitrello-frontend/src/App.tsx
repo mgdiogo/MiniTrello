@@ -9,14 +9,15 @@ import PublicRoute from './components/PublicRoute.tsx'
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <PublicRoute />,
+    children: [
+      { index: true, element: <LoginPage /> }
+    ]
+  },
+  {
+    path: "/",
     element: <RootLayout />,
     children: [
-      {
-        element: <PublicRoute />,
-        children: [
-          { index: true, element: <LoginPage /> }
-        ]
-      },
       {
         element: <ProtectedRoute />,
         children: [
