@@ -1,5 +1,5 @@
 type AuthFieldProps = {
-    icon: React.ComponentType<{className?: string}>,
+    icon?: React.ComponentType<{className?: string}>,
     fieldLabel: string,
     fieldType: string,
     fieldPlaceholder: string,
@@ -21,16 +21,16 @@ export default function AuthField({
         <>
             <div className="field-group">
                 { extra ? (
-                    <div className="field-group-row">
-                        <label className="field-label">Password</label>
+                    <div className="field-label-row">
+                        <label className="field-label">{fieldLabel}</label>
                         {extra}
                     </div>
                 ) : (
                 <label className="field-label">{fieldLabel}</label>
                 )}
                 <div className="field-input-wrapper">
-                    <Icon className="field-icon" />
-                    <input className="field-input" type={fieldType} placeholder={fieldPlaceholder} value={value} onChange={(e) => onChange(e.target.value)} required />
+                    {Icon ? <Icon className="field-icon"/> : null}
+                    <input className={Icon ? "field-input" : "field-input-no-icon"} type={fieldType} placeholder={fieldPlaceholder} value={value} onChange={(e) => onChange(e.target.value)} required />
                 </div>
             </div>
         </>
