@@ -6,6 +6,7 @@ import RootLayout from './components/RootLayout.tsx'
 import ProtectedRoute from './components/ProtectedRoute.tsx'
 import PublicRoute from './components/PublicRoute.tsx'
 import AuthLayout from './components/AuthLayout.tsx'
+import RegisterPage from './pages/RegisterPage.tsx'
 
 const router = createBrowserRouter([
   {
@@ -15,7 +16,8 @@ const router = createBrowserRouter([
       {
         element: <AuthLayout />,
         children: [
-          { index: true, element: <LoginPage /> }
+          { index: true, element: <LoginPage /> },
+          { path: "register", element: <RegisterPage />}
         ]
       }
     ]
