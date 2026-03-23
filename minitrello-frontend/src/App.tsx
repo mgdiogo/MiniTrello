@@ -5,13 +5,19 @@ import { AuthProvider } from './context/AuthContext.tsx'
 import RootLayout from './components/RootLayout.tsx'
 import ProtectedRoute from './components/ProtectedRoute.tsx'
 import PublicRoute from './components/PublicRoute.tsx'
+import AuthLayout from './components/AuthLayout.tsx'
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <PublicRoute />,
     children: [
-      { index: true, element: <LoginPage /> }
+      {
+        element: <AuthLayout />,
+        children: [
+          { index: true, element: <LoginPage /> }
+        ]
+      }
     ]
   },
   {

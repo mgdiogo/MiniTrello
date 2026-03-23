@@ -200,14 +200,14 @@
 }
 
 /* ── Register link ── */
-.auth-register {
+.auth-redirect {
     margin-top: 2rem;
     text-align: center;
     color: var(--on-surface-variant);
     font-weight: 500;
 }
 
-.auth-register a {
+.auth-redirect a {
     color: var(--primary);
     font-weight: 700;
     text-decoration: none;
@@ -216,7 +216,7 @@
     transition: all 0.2s ease;
 }
 
-.auth-register a:hover {
+.auth-redirect a:hover {
     text-decoration: underline;
 }
 
