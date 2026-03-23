@@ -1,4 +1,5 @@
 import { Outlet } from "react-router-dom";
+import logo from "../assets/logo-only.svg"
 
 export default function AuthLayout() {
     return (
@@ -13,7 +14,7 @@ export default function AuthLayout() {
                     {/* Logo */}
                     <div className="auth-brand">
                         <h1 className="auth-brand-title">
-                            <img src="/src/assets/logo-only.svg" alt="MiniTrello Logo" className="auth-brand-title-logo" />
+                            <img src={logo} alt="MiniTrello Logo" className="auth-brand-title-logo" />
                             MiniTrello
                         </h1>
                         <p className="auth-brand-subtitle">Elevate your productivity flow.</p>
