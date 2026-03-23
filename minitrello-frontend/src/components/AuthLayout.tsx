@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import logo from "../assets/logo-only.svg"
+import "../styles/Auth.css"
 
 export default function AuthLayout() {
     return (

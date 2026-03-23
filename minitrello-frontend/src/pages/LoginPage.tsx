@@ -1,10 +1,9 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import usePageTitle from "../hooks/PageTitleHook"
-import useAuth from "../hooks/AuthHook"
+import usePageTitle from "../hooks/usePageTitle"
+import useAuth from "../hooks/useAuth"
 import axios from "axios"
 import axiosInstance from "../api/AxiosConfig"
-import "../styles/Auth.css"
 import EmailIcon from '../assets/email-icon.svg?react'
 import PasswordIcon from '../assets/password-icon.svg?react'
 import AuthField from "../components/AuthField"
@@ -12,7 +11,7 @@ import AuthRedirect from "../components/AuthRedirect"
 
 
 export default function LoginPage() {
-    usePageTitle("MiniTrello - Start Organizing Yourself!")
+    usePageTitle("MiniTrello - Login")
     const { login } = useAuth()
     const navigate = useNavigate()
     const [email, setEmail] = useState("")
@@ -40,7 +39,7 @@ export default function LoginPage() {
                         icon={EmailIcon}
                         fieldLabel="Email Address"
                         fieldType="email"
-                        fieldPlaceholder="name@company.com"
+                        fieldPlaceholder="email@provider.com"
                         value={email}
                         onChange={setEmail}
                     />
@@ -62,7 +61,7 @@ export default function LoginPage() {
             </div>
             <AuthRedirect
                 footerText="New to MiniTrello?"
-                footerLink="#"
+                footerLink="/register"
                 footerAction="Create an account"
             />
         </>

@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom"
-import useAuth from "../hooks/AuthHook"
+import useAuth from "../hooks/useAuth"
 
 // This component acts as a gate for protected pages
 // If the user is authenticated render the page
