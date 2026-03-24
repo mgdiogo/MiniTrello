@@ -6,8 +6,8 @@ import axios from "axios"
 import axiosInstance from "../api/AxiosConfig"
 import EmailIcon from '../assets/email-icon.svg?react'
 import PasswordIcon from '../assets/password-icon.svg?react'
-import AuthField from "../components/AuthField"
-import AuthRedirect from "../components/AuthRedirect"
+import AuthField from "../components/auth/AuthField"
+import AuthRedirect from "../components/auth/AuthRedirect"
 
 
 export default function LoginPage() {
