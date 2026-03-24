@@ -61,14 +61,14 @@ public class AuthService {
 		String email = userDTO.getEmail().toLowerCase().trim();
 		
 		if (userRepository.existsByEmail(email))
-			throw new ConflictException("Email already registered");
+			throw new ConflictException("Email already registered", "email");
 
 		UserEntity user = new UserEntity();
 		user.setFullName(userDTO.getFullName());
 		user.setEmail(email);
 
 		if (!userDTO.getPassword().equals(userDTO.getConfirmPassword()))
-			throw new BadRequestException("Passwords do not match");
+			throw new BadRequestException("Passwords do not match", "password");
 		
 		String hashedPassword = passwordEncoder.encode(userDTO.getPassword());
 		user.setPassword(hashedPassword);
