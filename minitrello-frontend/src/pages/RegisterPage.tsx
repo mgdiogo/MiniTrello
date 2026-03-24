@@ -6,6 +6,14 @@ import axiosInstance from "../api/AxiosConfig";
 import AuthField from "../components/auth/AuthField";
 import AuthRedirect from "../components/auth/AuthRedirect";
 
+type RegisterErrors = {
+    fullName?: string,
+    email?: string,
+    password?: string,
+    confirmPassword?: string,
+    form?: string
+}
+
 export default function RegisterPage() {
     usePageTitle("MiniTrello - Register")
     const navigate = useNavigate()
@@ -13,6 +21,7 @@ export default function RegisterPage() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
+    const [errors, setErrors] = useState<RegisterErrors>({})
 
     async function handleSubmit(e: React.SubmitEvent) {
         e.preventDefault()
@@ -22,8 +31,15 @@ export default function RegisterPage() {
 
             navigate("/")
         } catch (error) {
-            if (axios.isAxiosError(error))
-                console.error("Login failed:", error.response?.data.message || error.message)
+            if (axios.isAxiosError(error)) {
+                const message = error.response?.data.message;
+                const field = error.response?.data.field;
+
+                if (field)
+                    setErrors({[field]: message})
+                else
+                    setErrors({form: "Something went wrong. Please try again later."})
+            }
         }
     }
 
@@ -38,6 +54,7 @@ export default function RegisterPage() {
                             fieldPlaceholder="John Doe"
                             value={fullName}
                             onChange={setFullName}
+                            errorMessage={errors.fullName}
                         />
                         <AuthField
                             fieldLabel="Email"
@@ -45,6 +62,7 @@ export default function RegisterPage() {
                             fieldPlaceholder="email@provider.com"
                             value={email}
                             onChange={setEmail}
+                            errorMessage={errors.email}
                         />
                     </div>
                     <AuthField
@@ -53,6 +71,7 @@ export default function RegisterPage() {
                         fieldPlaceholder="••••••••"
                         value={password}
                         onChange={setPassword}
+                        errorMessage={errors.password}
                     />
                     <AuthField
                         fieldLabel="Confirm Password"
@@ -60,7 +79,9 @@ export default function RegisterPage() {
                         fieldPlaceholder="••••••••"
                         value={confirmPassword}
                         onChange={setConfirmPassword}
+                        errorMessage={errors.confirmPassword}
                     />
+                    {errors.form && <p className="auth-error-form">{errors.form}</p>}
                     <div className="auth-submit-wrapper">
                         <button className="auth-submit-btn" type="submit">
                             <span>Register</span>

@@ -85,7 +85,7 @@
 .auth-form {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 /* ── Field group ── */
@@ -195,6 +195,21 @@
     background-color: var(--surface-container-lowest);
 }
 
+.field-input-error {
+    background-color: color-mix(in srgb, var(--error-container) 18%, var(--surface-container-high));
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--error) 22%, transparent);
+    color: var(--on-surface);
+}
+
+.field-input-error::placeholder {
+    color: color-mix(in srgb, var(--error) 45%, var(--outline));
+}
+
+.field-input-error:focus {
+    background-color: color-mix(in srgb, var(--error-container) 12%, var(--surface-container-lowest));
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--error) 35%, transparent);
+}
+
 /* ── Submit button ── */
 .auth-submit-wrapper {
     padding-top: 1rem;
@@ -248,6 +263,20 @@
     text-decoration: underline;
 }
 
+.auth-error {
+    padding: 0 0 0.5rem;
+    position: relative;
+    left: 0.25rem;
+    font-size: 0.9rem;
+    color: var(--error);
+}
+
+.auth-error-form {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--error);
+}
+
 /* ── Decorative side shape (large screens only) ── */
 .auth-side-shape {
     display: none;
@@ -286,5 +315,4 @@
     .field-input-row>.field-group {
         flex: 1;
     }
-
 }

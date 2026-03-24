@@ -9,6 +9,11 @@ import PasswordIcon from '../assets/password-icon.svg?react'
 import AuthField from "../components/auth/AuthField"
 import AuthRedirect from "../components/auth/AuthRedirect"
 
+type LoginErrors = {
+    email?: string
+    password?: string
+    form?: string
+}
 
 export default function LoginPage() {
     usePageTitle("MiniTrello - Login")
@@ -16,6 +21,7 @@ export default function LoginPage() {
     const navigate = useNavigate()
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [errors, setErrors] = useState<LoginErrors>({})
 
     async function handleSubmit(e: React.SubmitEvent) {
         e.preventDefault()
@@ -26,8 +32,15 @@ export default function LoginPage() {
             login(response.data)
             navigate("/dashboard")
         } catch (error) {
-            if (axios.isAxiosError(error))
-                console.error("Login failed:", error.response?.data.message || error.message)
+            if (axios.isAxiosError(error)) {
+                const message = error.response?.data.message;
+                const field = error.response?.data.field;
+
+                if (field)
+                    setErrors({ [field]: message })
+                else
+                    setErrors({ form: "Something went wrong. Please try again later." })
+            }
         }
     }
 
@@ -42,6 +55,7 @@ export default function LoginPage() {
                         fieldPlaceholder="email@provider.com"
                         value={email}
                         onChange={setEmail}
+                        errorMessage={errors.email}
                     />
                     <AuthField
                         icon={PasswordIcon}
@@ -51,7 +65,9 @@ export default function LoginPage() {
                         value={password}
                         onChange={setPassword}
                         extra={<Link className="field-forgot" to="#">Forgot?</Link>}
+                        errorMessage={errors.password}
                     />
+                    {errors.form && <p className="auth-error-form">{errors.form}</p>}
                     <div className="auth-submit-wrapper">
                         <button className="auth-submit-btn" type="submit">
                             <span>Sign In</span>

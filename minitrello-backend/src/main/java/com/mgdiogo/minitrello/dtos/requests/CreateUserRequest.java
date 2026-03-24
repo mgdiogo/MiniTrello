@@ -16,18 +16,18 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CreateUserRequest {
 	@NotBlank(message = "Full name is required")
-	@Size(min = 1, max = 100, message = "Full name must have between 1 and 100 chracters")
+	@Size(max = 100, message = "Full name must be between 1 and 100 characters")
 	private String fullName;
 
 	@NotBlank(message = "Email is required")
-	@Email(message = "Enter a valid email")
+	@Email(message = "Enter a valid email address")
 	private String email;
 
 	@NotBlank(message = "Password is required")
-	@Size(min = 6, max = 32, message = "Password must have between 6 and 32 characters")
+	@Size(min = 6, max = 64, message = "Password must be between 6 and 32 characters")
 	@Pattern(
 		regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d]).{6,}$",
-		message = "Password must contain upper, lower, number and special character"
+		message = "Password must contain atleast one upper, lower, number and special character"
 	)
 	private String password;
 
