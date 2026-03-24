@@ -4,7 +4,7 @@ MiniTrello is a smaller version of the popular [Trello](https://trello.com/) des
 
 ### Features 
 
-- User management (With user and admin roles)
+- User management (user and admin roles)
 - Creating, organizing and updating tasks
 
 ### What I'm learning with this project
