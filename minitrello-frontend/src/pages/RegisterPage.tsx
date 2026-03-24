@@ -14,15 +14,13 @@ export default function RegisterPage() {
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
 
-    {/*Backend currently does not support full name and confirm password, still needs to be implemented*/ }
     async function handleSubmit(e: React.SubmitEvent) {
         e.preventDefault()
 
         try {
-            const response = await axiosInstance.post("/api/auth/register", { fullName, email, password, confirmPassword })
+            await axiosInstance.post("/api/auth/register", { fullName, email, password, confirmPassword })
 
-            console.log(response)
-            navigate("/login")
+            navigate("/")
         } catch (error) {
             if (axios.isAxiosError(error))
                 console.error("Login failed:", error.response?.data.message || error.message)

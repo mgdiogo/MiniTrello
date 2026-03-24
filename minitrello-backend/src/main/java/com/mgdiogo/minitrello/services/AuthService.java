@@ -16,6 +16,7 @@ import com.mgdiogo.minitrello.dtos.responses.LoginResponse;
 import com.mgdiogo.minitrello.dtos.responses.UserResponse;
 import com.mgdiogo.minitrello.entities.UserEntity;
 import com.mgdiogo.minitrello.enums.UserRole;
+import com.mgdiogo.minitrello.exceptions.BadRequestException;
 import com.mgdiogo.minitrello.exceptions.ConflictException;
 import com.mgdiogo.minitrello.repositories.UserRepository;
 import com.mgdiogo.minitrello.security.CustomUserDetails;
@@ -23,7 +24,9 @@ import com.mgdiogo.minitrello.security.JwtService;
 import com.mgdiogo.minitrello.utility.UserMapper;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -61,7 +64,11 @@ public class AuthService {
 			throw new ConflictException("Email already registered");
 
 		UserEntity user = new UserEntity();
+		user.setFullName(userDTO.getFullName());
 		user.setEmail(email);
+
+		if (!userDTO.getPassword().equals(userDTO.getConfirmPassword()))
+			throw new BadRequestException("Passwords do not match");
 		
 		String hashedPassword = passwordEncoder.encode(userDTO.getPassword());
 		user.setPassword(hashedPassword);

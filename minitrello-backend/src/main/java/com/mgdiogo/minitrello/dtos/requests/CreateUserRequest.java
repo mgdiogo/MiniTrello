@@ -15,6 +15,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class CreateUserRequest {
+	@NotBlank(message = "Full name is required")
+	@Size(min = 1, max = 100, message = "Full name must have between 1 and 100 chracters")
+	private String fullName;
 
 	@NotBlank(message = "Email is required")
 	@Email(message = "Enter a valid email")
@@ -27,4 +30,8 @@ public class CreateUserRequest {
 		message = "Password must contain upper, lower, number and special character"
 	)
 	private String password;
+
+	@NotBlank(message = "Confirm password is required")
+	private String confirmPassword;
+
 }
