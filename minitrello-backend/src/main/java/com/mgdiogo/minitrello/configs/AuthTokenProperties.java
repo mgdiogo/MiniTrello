@@ -13,4 +13,10 @@ public class AuthTokenProperties {
     private long accessTokenExpirationMinutes;
     private long refreshTokenExpirationDays;
     private String issuer;
+
+    private String accessCookieName;
+    private String refreshCookieName;
+    private boolean cookieSecure;
+    private String cookieSameSite;
+    private String refreshCookiePath;
 }

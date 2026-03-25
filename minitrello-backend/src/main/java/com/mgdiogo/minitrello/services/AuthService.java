@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.mgdiogo.minitrello.dtos.requests.CreateUserRequest;
 import com.mgdiogo.minitrello.dtos.requests.LoginRequest;
-import com.mgdiogo.minitrello.dtos.responses.LoginResponse;
+import com.mgdiogo.minitrello.dtos.responses.AuthResponse;
 import com.mgdiogo.minitrello.dtos.responses.UserResponse;
 import com.mgdiogo.minitrello.entities.UserEntity;
 import com.mgdiogo.minitrello.enums.UserRole;
@@ -35,25 +35,31 @@ public class AuthService {
 	private final AuthenticationManager authenticationManager;
 	private final UserRepository userRepository;
 	private final JwtService jwtService;
+	private final RefreshTokenService refreshTokenService;
 
 
-	public LoginResponse loginUser(LoginRequest request) {
+	public AuthResponse loginUser(LoginRequest request) {
 		UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(request.getEmail().toLowerCase().trim(), request.getPassword());
 		Authentication auth = this.authenticationManager.authenticate(usernamePassword);
 
-		CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
+		CustomUserDetails customUser = (CustomUserDetails) auth.getPrincipal();
 
-		List<String> roles = user.getAuthorities()
+		List<String> roles = customUser.getAuthorities()
 			.stream()
 			.map(GrantedAuthority::getAuthority)
 			.toList();
 
-		String token = jwtService.generateAccessToken(Map.of("roles", roles, "type", "access"), user);
+		String token = jwtService.generateAccessToken(Map.of("roles", roles, "type", "access"), customUser);
+		String refreshToken = refreshTokenService.generateRefreshToken();
 
-		return new LoginResponse(
-			user.getUserId(),
-			user.getEmail(),
-			token
+		UserEntity user = userRepository.findById(customUser.getUserId()).orElseThrow();
+		refreshTokenService.storeRefreshToken(user, refreshToken);
+
+		return new AuthResponse(
+			customUser.getUserId(),
+			customUser.getEmail(),
+			token,
+			refreshToken
 		);
 	}
 
