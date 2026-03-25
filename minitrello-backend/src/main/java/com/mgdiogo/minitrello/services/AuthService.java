@@ -48,7 +48,7 @@ public class AuthService {
 			.map(GrantedAuthority::getAuthority)
 			.toList();
 
-		String token = jwtService.generateToken(Map.of("roles", roles), user);
+		String token = jwtService.generateAccessToken(Map.of("roles", roles, "type", "access"), user);
 
 		return new LoginResponse(
 			user.getUserId(),

@@ -7,22 +7,25 @@ import java.util.function.Function;
 
 import javax.crypto.SecretKey;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import com.mgdiogo.minitrello.configs.AuthTokenProperties;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class JwtService {
-    @Value("${jwt.secret-key}")
-    private String SECRET_KEY;
+    private final AuthTokenProperties authTokenProperties;
 
     public String getUsername(String token) { return extractClaim(token, Claims::getSubject); }
 
-    public String generateToken(
+    public String generateAccessToken(
         Map<String, Object> extraClaims,
         CustomUserDetails userDetails
     ) {
@@ -30,15 +33,16 @@ public class JwtService {
             .builder()
             .claims().add(extraClaims).and()
             .subject(userDetails.getUsername())
+            .issuer(authTokenProperties.getIssuer())
             .issuedAt(new Date(System.currentTimeMillis()))
-            .expiration(new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1)))
+            .expiration(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(authTokenProperties.getAccessTokenExpirationMinutes())))
             .signWith(getSignInKey())
             .compact();
     }
 
     public boolean isTokenValid(String token, CustomUserDetails userDetails) {
         final String username = getUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token) && isAccessToken(token);
     }
 
     private boolean isTokenExpired(String token) {
@@ -60,7 +64,15 @@ public class JwtService {
     }
 
     private SecretKey getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        byte[] keyBytes = Decoders.BASE64.decode(authTokenProperties.getSecretKey());
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public String getTokenType(String token) {
+        return extractClaim(token, claims -> claims.get("type", String.class));
+    }
+
+    public boolean isAccessToken(String token) {
+        return "access".equals(getTokenType(token));
     }
 }
