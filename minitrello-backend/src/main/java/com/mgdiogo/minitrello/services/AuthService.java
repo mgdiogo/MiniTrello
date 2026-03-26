@@ -37,7 +37,6 @@ public class AuthService {
 	private final JwtService jwtService;
 	private final RefreshTokenService refreshTokenService;
 
-
 	public AuthResponse loginUser(LoginRequest request) {
 		UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(request.getEmail().toLowerCase().trim(), request.getPassword());
 		Authentication auth = this.authenticationManager.authenticate(usernamePassword);
@@ -49,7 +48,14 @@ public class AuthService {
 			.map(GrantedAuthority::getAuthority)
 			.toList();
 
-		String token = jwtService.generateAccessToken(Map.of("roles", roles, "type", "access"), customUser);
+		String token = jwtService.generateAccessToken(
+			Map.of(
+				"uid", customUser.getUserId(),
+				"roles", roles,
+				"type", "access"
+			),
+			customUser.getUsername()
+		);
 		String refreshToken = refreshTokenService.generateRefreshToken();
 
 		UserEntity user = userRepository.findById(customUser.getUserId()).orElseThrow();
