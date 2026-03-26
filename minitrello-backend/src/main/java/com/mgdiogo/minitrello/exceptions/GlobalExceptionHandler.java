@@ -68,11 +68,19 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(request, HttpStatus.CONFLICT);
 	}
 
-	// Throws custom unauthorized error
+	// Throws custom wrong credentials error
 	@ExceptionHandler(BadCredentialsException.class)
 	public ResponseEntity<ErrorResponse> handleBadCredentials(BadCredentialsException badCredentials) {
 		ErrorResponse request = new ErrorResponse(LocalDateTime.now().format(FORMATTER), HttpStatus.UNAUTHORIZED.value(), "Unauthorized",
 				"Invalid email or password", "email");
+
+		return new ResponseEntity<>(request, HttpStatus.UNAUTHORIZED);
+	}
+
+	@ExceptionHandler(UnauthorizedRequestException.class)
+	public ResponseEntity<ErrorResponse> handleUnathorizedRequest(UnauthorizedRequestException unauthorizedRequest) {
+		ErrorResponse request = new ErrorResponse(LocalDateTime.now().format(FORMATTER), HttpStatus.UNAUTHORIZED.value(), "Unauthorized",
+				"Unauthorized", null);
 
 		return new ResponseEntity<>(request, HttpStatus.UNAUTHORIZED);
 	}
