@@ -35,6 +35,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final ErrorResponseWriter errorResponseWriter;
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+
+        return "/auth/login".equals(path)
+                || "/auth/register".equals(path)
+                || "/auth/refresh".equals(path)
+                || "/auth/logout".equals(path);
+    }
+
+    @Override
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
@@ -46,17 +56,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        if (!jwtService.isTokenValid(token)) {
-            unauthorized(response);
-            return;
-        }
-
         if (SecurityContextHolder.getContext().getAuthentication() != null) {
             filterChain.doFilter(request, response);
             return;
         }
 
         try {
+            if (!jwtService.isTokenValid(token)) {
+                unauthorized(response);
+                return;
+            }
+            
             final String email = jwtService.getUsername(token);
             final Long userId = jwtService.extractClaim(token, claims -> claims.get("uid", Long.class));
             List<?> roles = jwtService.extractClaim(token, claims -> claims.get("roles", List.class));

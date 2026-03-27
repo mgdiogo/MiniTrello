@@ -19,9 +19,13 @@ import com.mgdiogo.minitrello.dtos.responses.LoginResponse;
 import com.mgdiogo.minitrello.dtos.responses.UserResponse;
 import com.mgdiogo.minitrello.services.AuthService;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
@@ -29,29 +33,13 @@ public class AuthController {
 	private final AuthService authService;
 	private final AuthTokenProperties authTokenProperties;
 
+	// Handles user login and sets cookie headers
 	@PostMapping("/login")
 	public ResponseEntity<LoginResponse> loginUser(@Valid @RequestBody LoginRequest loginRequest) {
 		AuthResponse data = authService.loginUser(loginRequest);
 
-		ResponseCookie accessCookie = ResponseCookie.from(
-				authTokenProperties.getAccessCookieName(),
-				data.getToken())
-				.httpOnly(true)
-				.secure(authTokenProperties.isCookieSecure())
-				.sameSite(authTokenProperties.getCookieSameSite())
-				.path("/")
-				.maxAge(Duration.ofMinutes(authTokenProperties.getAccessTokenExpirationMinutes()))
-				.build();
-
-		ResponseCookie refreshCookie = ResponseCookie.from(
-				authTokenProperties.getRefreshCookieName(),
-				data.getRefreshToken())
-				.httpOnly(true)
-				.secure(authTokenProperties.isCookieSecure())
-				.sameSite(authTokenProperties.getCookieSameSite())
-				.path(authTokenProperties.getRefreshCookiePath())
-				.maxAge(Duration.ofDays(authTokenProperties.getRefreshTokenExpirationDays()))
-				.build();
+		ResponseCookie accessCookie = buildAccessCookie(data.getToken());
+		ResponseCookie refreshCookie = buildRefreshCookie(data.getRefreshToken());
 
 		LoginResponse response = new LoginResponse(data.getUserId(), data.getEmail());
 
@@ -67,5 +55,58 @@ public class AuthController {
 	@PostMapping("/register")
 	public ResponseEntity<UserResponse> createUser(@Valid @RequestBody CreateUserRequest userDto) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(authService.createUser(userDto));
+	}
+
+	// Validates the refresh token cookie and issues a new access/refresh token pair
+	@PostMapping("/refresh")
+	public ResponseEntity<Void> refreshUserToken(HttpServletRequest request) {
+		String refreshToken = extractRefreshToken(request);
+		AuthResponse data = authService.refreshToken(refreshToken);
+
+		ResponseCookie accessCookie = buildAccessCookie(data.getToken());
+		ResponseCookie refreshCookie = buildRefreshCookie(data.getRefreshToken());
+
+		return ResponseEntity.noContent().headers(headers -> {
+			headers.add(HttpHeaders.SET_COOKIE, accessCookie.toString());
+			headers.add(HttpHeaders.SET_COOKIE, refreshCookie.toString());
+		}).build();
+	}
+
+	private String extractRefreshToken(HttpServletRequest request) {
+		Cookie[] cookies = request.getCookies();
+
+		if (cookies == null)
+			return null;
+
+		for (Cookie cookie : cookies) {
+			if (authTokenProperties.getRefreshCookieName().equals(cookie.getName()))
+				return cookie.getValue();
+		}
+
+		return null;
+	}
+
+	private ResponseCookie buildAccessCookie(String token) {
+		return ResponseCookie.from(
+				authTokenProperties.getAccessCookieName(),
+				token)
+				.httpOnly(true)
+				.secure(authTokenProperties.isCookieSecure())
+				.sameSite(authTokenProperties.getCookieSameSite())
+				.path("/")
+				.maxAge(Duration.ofMinutes(authTokenProperties.getAccessTokenExpirationMinutes()))
+				.build();
+	}
+
+	private ResponseCookie buildRefreshCookie(String token) {
+		return ResponseCookie.from(
+				authTokenProperties.getRefreshCookieName(),
+				token)
+				.httpOnly(true)
+				.secure(authTokenProperties.isCookieSecure())
+				.sameSite(authTokenProperties.getCookieSameSite())
+				.path(authTokenProperties.getRefreshCookiePath())
+				.maxAge(Duration.ofDays(authTokenProperties.getRefreshTokenExpirationDays()))
+				.build();
 	}
 }
