@@ -1,13 +1,12 @@
 package com.mgdiogo.minitrello.security;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.mgdiogo.minitrello.enums.UserRole;
+import com.mgdiogo.minitrello.utility.RoleMapper;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -25,9 +24,7 @@ public class CustomUserDetails implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		if (this.role == UserRole.ADMIN) return List.of(new SimpleGrantedAuthority("ADMIN"), new SimpleGrantedAuthority("USER"));
-
-		return List.of(new SimpleGrantedAuthority("USER"));
+		return RoleMapper.toAuthorities(this.role);
 	}
 
 	@Override
