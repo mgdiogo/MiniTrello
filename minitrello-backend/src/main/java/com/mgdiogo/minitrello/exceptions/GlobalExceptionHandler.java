@@ -80,7 +80,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(UnauthorizedRequestException.class)
 	public ResponseEntity<ErrorResponse> handleUnathorizedRequest(UnauthorizedRequestException unauthorizedRequest) {
 		ErrorResponse request = new ErrorResponse(LocalDateTime.now().format(FORMATTER), HttpStatus.UNAUTHORIZED.value(), "Unauthorized",
-				"Unauthorized", null);
+				unauthorizedRequest.getMessage(), null);
 
 		return new ResponseEntity<>(request, HttpStatus.UNAUTHORIZED);
 	}
