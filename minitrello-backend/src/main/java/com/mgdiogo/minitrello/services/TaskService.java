@@ -11,11 +11,10 @@ import lombok.RequiredArgsConstructor;
 public class TaskService {
 	public TaskResponse taskEntityToDTO(TaskEntity task) {
 		return new TaskResponse(
-            task.getTaskId(),
-            task.getTitle(),
-            task.getDescription(),
-			task.getCreatedAt(),
-            task.getStatus()
-    	);
+				task.getTaskId(),
+				task.getTitle(),
+				task.getDescription(),
+				task.getCreatedAt(),
+				task.getStatus());
 	}
 }

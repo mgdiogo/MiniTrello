@@ -23,6 +23,7 @@ public class RefreshTokenCleanupService {
         int deletedRevoked = refreshTokenRepository.deleteOldRevokedTokens(now.minusDays(1));
         int deletedExpired = refreshTokenRepository.deleteExpiredTokens(now.minusDays(1));
 
-        log.info("Refresh token cleanup completed. revokedDeleted={}, expiredDeleted={}", deletedRevoked, deletedExpired);
+        log.info("Refresh token cleanup completed. revokedDeleted={}, expiredDeleted={}", deletedRevoked,
+                deletedExpired);
     }
 }

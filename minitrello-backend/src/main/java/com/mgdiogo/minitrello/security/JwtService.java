@@ -25,34 +25,34 @@ import lombok.RequiredArgsConstructor;
 public class JwtService {
     private final AuthTokenProperties authTokenProperties;
 
-    public String getUsername(String token) { return extractClaim(token, Claims::getSubject); }
+    public String getUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
 
     public String generateAccessToken(
-        Map<String, Object> extraClaims,
-        String sub
-    ) {
+            Map<String, Object> extraClaims,
+            String sub) {
         return Jwts
-            .builder()
-            .claims().add(extraClaims).and()
-            .subject(sub)
-            .issuer(authTokenProperties.getIssuer())
-            .issuedAt(new Date(System.currentTimeMillis()))
-            .expiration(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(authTokenProperties.getAccessTokenExpirationMinutes())))
-            .signWith(getSignInKey())
-            .compact();
+                .builder()
+                .claims().add(extraClaims).and()
+                .subject(sub)
+                .issuer(authTokenProperties.getIssuer())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis()
+                        + TimeUnit.MINUTES.toMillis(authTokenProperties.getAccessTokenExpirationMinutes())))
+                .signWith(getSignInKey())
+                .compact();
     }
 
     public boolean isTokenValid(String token) {
-        return (
-            !isTokenExpired(token)
-            && isAccessToken(token)
-            && isIssuerValid(token)
-            && validateRoles(token)
-            && hasClaim(token, "sub", String.class)
-            && hasClaim(token, "uid", Long.class)
-            && hasClaim(token, "roles", List.class)
-            && hasClaim(token, "iat", Date.class)
-        );
+        return (!isTokenExpired(token)
+                && isAccessToken(token)
+                && isIssuerValid(token)
+                && validateRoles(token)
+                && hasClaim(token, "sub", String.class)
+                && hasClaim(token, "uid", Long.class)
+                && hasClaim(token, "roles", List.class)
+                && hasClaim(token, "iat", Date.class));
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -60,13 +60,13 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    private Claims extractAllClaims(String token) { 
+    private Claims extractAllClaims(String token) {
         return Jwts
-            .parser()
-            .verifyWith(getSignInKey())
-            .build()
-            .parseSignedClaims(token)
-            .getPayload();
+                .parser()
+                .verifyWith(getSignInKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
     private SecretKey getSignInKey() {
@@ -104,7 +104,7 @@ public class JwtService {
 
         for (Object role : roles) {
             if (role == null || !validRoles.contains(role.toString()))
-                return false;   
+                return false;
         }
 
         return true;

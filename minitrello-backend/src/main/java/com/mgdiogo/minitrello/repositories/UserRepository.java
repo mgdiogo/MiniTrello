@@ -10,5 +10,6 @@ import com.mgdiogo.minitrello.entities.UserEntity;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 	boolean existsByEmail(String email);
+
 	Optional<UserEntity> findOneByEmail(String email);
 }

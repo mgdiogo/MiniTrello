@@ -40,32 +40,28 @@ public class WebSecurityConfig {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.formLogin(form -> form.disable())
 				.exceptionHandling(ex -> ex
-					.authenticationEntryPoint((request, response, authException) -> {
-						errorResponseWriter.write(
-							response,
-							HttpStatus.UNAUTHORIZED.value(),
-							"Unauthorized",
-							"Authentication required",
-							null
-						);
-					})
-					.accessDeniedHandler((request, response, accessDeniedException) -> {
-						errorResponseWriter.write(
-							response,
-							HttpStatus.FORBIDDEN.value(),
-							"Forbidden",
-							"Access denied",
-							null
-						);
-					})
-            	)
+						.authenticationEntryPoint((request, response, authException) -> {
+							errorResponseWriter.write(
+									response,
+									HttpStatus.UNAUTHORIZED.value(),
+									"Unauthorized",
+									"Authentication required",
+									null);
+						})
+						.accessDeniedHandler((request, response, accessDeniedException) -> {
+							errorResponseWriter.write(
+									response,
+									HttpStatus.FORBIDDEN.value(),
+									"Forbidden",
+									"Access denied",
+									null);
+						}))
 				.authorizeHttpRequests(auth -> auth
-					.requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
-					.requestMatchers("/error").permitAll()
+						.requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
+						.requestMatchers("/error").permitAll()
 
-					.requestMatchers("/users/**").hasRole("ADMIN")
-					.anyRequest().authenticated()
-				)
+						.requestMatchers("/users/**").hasRole("ADMIN")
+						.anyRequest().authenticated())
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
@@ -85,9 +81,13 @@ public class WebSecurityConfig {
 	}
 
 	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) { return config.getAuthenticationManager(); }
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
+		return config.getAuthenticationManager();
+	}
 
 	// Password hashing algorithm
 	@Bean
-	public BCryptPasswordEncoder passwordEncoder() { return new BCryptPasswordEncoder(); }
+	public BCryptPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 }

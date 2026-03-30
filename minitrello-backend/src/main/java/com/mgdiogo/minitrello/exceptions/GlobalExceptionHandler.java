@@ -29,7 +29,8 @@ public class GlobalExceptionHandler {
 
 		String message = fieldError != null ? fieldError.getDefaultMessage() : "Validation check failed";
 		String field = fieldError != null ? fieldError.getField() : null;
-		ErrorResponse request = new ErrorResponse(LocalDateTime.now().format(FORMATTER), HttpStatus.BAD_REQUEST.value(), "Bad Request",
+		ErrorResponse request = new ErrorResponse(LocalDateTime.now().format(FORMATTER), HttpStatus.BAD_REQUEST.value(),
+				"Bad Request",
 				message, field);
 		return new ResponseEntity<>(request, HttpStatus.BAD_REQUEST);
 	}
@@ -37,15 +38,17 @@ public class GlobalExceptionHandler {
 	// Throws error when an endpoint is not found
 	@ExceptionHandler(NoHandlerFoundException.class)
 	public ResponseEntity<ErrorResponse> handleNoHandlerFound(NoHandlerFoundException ex) {
-		ErrorResponse request = new ErrorResponse(LocalDateTime.now().format(FORMATTER),HttpStatus.NOT_FOUND.value(),"Not Found",
-			"Endpoint not found", null);
+		ErrorResponse request = new ErrorResponse(LocalDateTime.now().format(FORMATTER), HttpStatus.NOT_FOUND.value(),
+				"Not Found",
+				"Endpoint not found", null);
 		return new ResponseEntity<>(request, HttpStatus.NOT_FOUND);
 	}
 
 	// Throws error when data inside a valid endpoint is not found
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<ErrorResponse> handleNotFound(ResourceNotFoundException notFound) {
-		ErrorResponse request = new ErrorResponse(LocalDateTime.now().format(FORMATTER), HttpStatus.NOT_FOUND.value(), "Not Found",
+		ErrorResponse request = new ErrorResponse(LocalDateTime.now().format(FORMATTER), HttpStatus.NOT_FOUND.value(),
+				"Not Found",
 				notFound.getMessage(), notFound.getField());
 		return new ResponseEntity<>(request, HttpStatus.NOT_FOUND);
 	}
@@ -53,7 +56,8 @@ public class GlobalExceptionHandler {
 	// Throws custom bad request error
 	@ExceptionHandler(BadRequestException.class)
 	public ResponseEntity<ErrorResponse> handleBadRequest(BadRequestException badRequest) {
-		ErrorResponse request = new ErrorResponse(LocalDateTime.now().format(FORMATTER), HttpStatus.BAD_REQUEST.value(), "Bad Request",
+		ErrorResponse request = new ErrorResponse(LocalDateTime.now().format(FORMATTER), HttpStatus.BAD_REQUEST.value(),
+				"Bad Request",
 				badRequest.getMessage(), badRequest.getField());
 
 		return new ResponseEntity<>(request, HttpStatus.BAD_REQUEST);
@@ -62,7 +66,8 @@ public class GlobalExceptionHandler {
 	// Throws custom conflict error
 	@ExceptionHandler(ConflictException.class)
 	public ResponseEntity<ErrorResponse> handleConflictException(ConflictException conflictException) {
-		ErrorResponse request = new ErrorResponse(LocalDateTime.now().format(FORMATTER), HttpStatus.CONFLICT.value(), "Conflict",
+		ErrorResponse request = new ErrorResponse(LocalDateTime.now().format(FORMATTER), HttpStatus.CONFLICT.value(),
+				"Conflict",
 				conflictException.getMessage(), conflictException.getField());
 
 		return new ResponseEntity<>(request, HttpStatus.CONFLICT);
@@ -71,7 +76,8 @@ public class GlobalExceptionHandler {
 	// Throws custom wrong credentials error
 	@ExceptionHandler(BadCredentialsException.class)
 	public ResponseEntity<ErrorResponse> handleBadCredentials(BadCredentialsException badCredentials) {
-		ErrorResponse request = new ErrorResponse(LocalDateTime.now().format(FORMATTER), HttpStatus.UNAUTHORIZED.value(), "Unauthorized",
+		ErrorResponse request = new ErrorResponse(LocalDateTime.now().format(FORMATTER),
+				HttpStatus.UNAUTHORIZED.value(), "Unauthorized",
 				"Invalid email or password", "email");
 
 		return new ResponseEntity<>(request, HttpStatus.UNAUTHORIZED);
@@ -79,7 +85,8 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(UnauthorizedRequestException.class)
 	public ResponseEntity<ErrorResponse> handleUnathorizedRequest(UnauthorizedRequestException unauthorizedRequest) {
-		ErrorResponse request = new ErrorResponse(LocalDateTime.now().format(FORMATTER), HttpStatus.UNAUTHORIZED.value(), "Unauthorized",
+		ErrorResponse request = new ErrorResponse(LocalDateTime.now().format(FORMATTER),
+				HttpStatus.UNAUTHORIZED.value(), "Unauthorized",
 				unauthorizedRequest.getMessage(), null);
 
 		return new ResponseEntity<>(request, HttpStatus.UNAUTHORIZED);
@@ -89,7 +96,8 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(Exception.class) // catch-all — always have this
 	public ResponseEntity<ErrorResponse> handleUnexpected(Exception ex) {
 		log.error("Unexpected error", ex); // log the real cause server-side
-		ErrorResponse request = new ErrorResponse(LocalDateTime.now().format(FORMATTER), HttpStatus.INTERNAL_SERVER_ERROR.value(),
+		ErrorResponse request = new ErrorResponse(LocalDateTime.now().format(FORMATTER),
+				HttpStatus.INTERNAL_SERVER_ERROR.value(),
 				"Internal Server Error", "An unexpected error occurred. Please try again later.", null);
 		return new ResponseEntity<>(request, HttpStatus.INTERNAL_SERVER_ERROR);
 	}

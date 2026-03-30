@@ -66,7 +66,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 unauthorized(response);
                 return;
             }
-            
+
             final String email = jwtService.getUsername(token);
             final Long userId = jwtService.extractClaim(token, claims -> claims.get("uid", Long.class));
             List<?> roles = jwtService.extractClaim(token, claims -> claims.get("roles", List.class));

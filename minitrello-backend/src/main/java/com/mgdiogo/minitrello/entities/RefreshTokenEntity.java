@@ -17,19 +17,19 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name="refresh_tokens")
+@Table(name = "refresh_tokens")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class RefreshTokenEntity {
     @Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", nullable = false)
-	private UserEntity user;
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
 
     @Column(nullable = false, unique = true)
     private String tokenHash;

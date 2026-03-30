@@ -20,21 +20,19 @@ public class ErrorResponseWriter {
     private final ObjectMapper objectMapper;
 
     public void write(
-        HttpServletResponse response,
-        int status,
-        String error,
-        String message,
-        String field
-    ) throws IOException {
-        
+            HttpServletResponse response,
+            int status,
+            String error,
+            String message,
+            String field) throws IOException {
+
         ErrorResponse body = new ErrorResponse(
-            LocalDateTime.now().format(FORMATTER),
-            status,
-            error,
-            message,
-            field
-        );
-       
+                LocalDateTime.now().format(FORMATTER),
+                status,
+                error,
+                message,
+                field);
+
         response.setStatus(status);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         objectMapper.writeValue(response.getWriter(), body);

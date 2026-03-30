@@ -16,12 +16,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserMapper {
 	private final TaskService taskService;
-	
+
 	public UserResponse toResponse(UserEntity user) {
-		List<TaskResponse> tasks = user.getTasks() == null ? new ArrayList<>() : user.getTasks()
-			.stream()
-			.map(taskService::taskEntityToDTO)
-			.toList();
+		List<TaskResponse> tasks = user.getTasks() == null ? new ArrayList<>()
+				: user.getTasks()
+						.stream()
+						.map(taskService::taskEntityToDTO)
+						.toList();
 
 		return new UserResponse(user.getUserId(), user.getEmail(), tasks);
 	}

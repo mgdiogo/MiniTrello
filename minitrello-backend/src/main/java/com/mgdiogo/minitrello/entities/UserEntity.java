@@ -10,7 +10,7 @@ import java.util.List;
 import com.mgdiogo.minitrello.enums.UserRole;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -32,7 +32,7 @@ public class UserEntity {
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<TaskEntity> tasks;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private UserRole role;

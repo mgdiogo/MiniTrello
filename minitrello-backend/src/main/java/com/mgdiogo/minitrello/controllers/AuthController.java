@@ -35,8 +35,10 @@ public class AuthController {
 	private final AuthService authService;
 	private final AuthTokenProperties authTokenProperties;
 
-	// This endpoint helps the frontend determine the user state on app load and after page refreshes
-	// Returns 401 if the user is not authenticated, otherwise returns user info {userId, email}
+	// This endpoint helps the frontend determine the user state on app load and
+	// after page refreshes
+	// Returns 401 if the user is not authenticated, otherwise returns user info
+	// {userId, email}
 	@GetMapping("/me")
 	public ResponseEntity<LoginResponse> userState(Authentication authentication) {
 		LoginResponse response = authService.getUserState(authentication);
@@ -48,8 +50,10 @@ public class AuthController {
 	public ResponseEntity<LoginResponse> loginUser(@Valid @RequestBody LoginRequest loginRequest) {
 		AuthResponse data = authService.loginUser(loginRequest);
 
-		ResponseCookie accessCookie = buildAccessCookie(data.getToken(), authTokenProperties.getAccessTokenExpirationMinutes());
-		ResponseCookie refreshCookie = buildRefreshCookie(data.getRefreshToken(), authTokenProperties.getRefreshTokenExpirationDays());
+		ResponseCookie accessCookie = buildAccessCookie(data.getToken(),
+				authTokenProperties.getAccessTokenExpirationMinutes());
+		ResponseCookie refreshCookie = buildRefreshCookie(data.getRefreshToken(),
+				authTokenProperties.getRefreshTokenExpirationDays());
 
 		LoginResponse response = new LoginResponse(data.getUserId(), data.getEmail());
 
@@ -73,8 +77,10 @@ public class AuthController {
 		String refreshToken = extractRefreshToken(request);
 		AuthResponse data = authService.refreshToken(refreshToken);
 
-		ResponseCookie accessCookie = buildAccessCookie(data.getToken(), authTokenProperties.getAccessTokenExpirationMinutes());
-		ResponseCookie refreshCookie = buildRefreshCookie(data.getRefreshToken(), authTokenProperties.getRefreshTokenExpirationDays());
+		ResponseCookie accessCookie = buildAccessCookie(data.getToken(),
+				authTokenProperties.getAccessTokenExpirationMinutes());
+		ResponseCookie refreshCookie = buildRefreshCookie(data.getRefreshToken(),
+				authTokenProperties.getRefreshTokenExpirationDays());
 
 		return ResponseEntity.noContent().headers(headers -> {
 			headers.add(HttpHeaders.SET_COOKIE, accessCookie.toString());
@@ -95,7 +101,6 @@ public class AuthController {
 			headers.add(HttpHeaders.SET_COOKIE, refreshCookie.toString());
 		}).build();
 	}
-
 
 	// Extracts the refresh token from the request cookies
 	private String extractRefreshToken(HttpServletRequest request) {
