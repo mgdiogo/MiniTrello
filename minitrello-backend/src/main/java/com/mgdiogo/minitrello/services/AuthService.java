@@ -3,6 +3,7 @@ package com.mgdiogo.minitrello.services;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mgdiogo.minitrello.dtos.requests.CreateUserRequest;
 import com.mgdiogo.minitrello.dtos.requests.LoginRequest;
 import com.mgdiogo.minitrello.dtos.responses.AuthResponse;
+import com.mgdiogo.minitrello.dtos.responses.LoginResponse;
 import com.mgdiogo.minitrello.dtos.responses.UserResponse;
 import com.mgdiogo.minitrello.entities.RefreshTokenEntity;
 import com.mgdiogo.minitrello.entities.UserEntity;
@@ -25,6 +27,7 @@ import com.mgdiogo.minitrello.exceptions.UnauthorizedRequestException;
 import com.mgdiogo.minitrello.repositories.RefreshTokenRepository;
 import com.mgdiogo.minitrello.repositories.UserRepository;
 import com.mgdiogo.minitrello.security.CustomUserDetails;
+import com.mgdiogo.minitrello.security.JwtPrincipal;
 import com.mgdiogo.minitrello.security.JwtService;
 import com.mgdiogo.minitrello.utility.UserMapper;
 import com.mgdiogo.minitrello.utility.RoleMapper;
@@ -108,6 +111,13 @@ public class AuthService {
 		return userMapper.toResponse(createdUser);
 	}
 
+	public void logoutUser(String refreshToken) {
+		Optional<RefreshTokenEntity> token = refreshTokenService.findValidRefreshToken(refreshToken);
+
+		if (token.isPresent())
+			refreshTokenService.revokeRefreshToken(token.get());
+	}
+
 	@Transactional
 	public AuthResponse refreshToken(String token) {
 		RefreshTokenEntity refreshToken = refreshTokenService.findValidRefreshToken(token)
@@ -134,5 +144,14 @@ public class AuthService {
 				user.getEmail(),
 				newAccessToken,
 				newRefreshToken);
+	}
+
+	public LoginResponse getUserState(Authentication authentication) {
+		if (authentication == null || !authentication.isAuthenticated())
+			throw new UnauthorizedRequestException("No authenticated user found");
+
+		JwtPrincipal principal = (JwtPrincipal) authentication.getPrincipal();
+
+		return new LoginResponse(principal.userId(), principal.email());
 	}
 }
