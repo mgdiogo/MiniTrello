@@ -59,7 +59,7 @@ export default function RegisterPage() {
                         <AuthField
                             fieldLabel="Email"
                             fieldType="email"
-                            fieldPlaceholder="email@provider.com"
+                            fieldPlaceholder="your@email.com"
                             value={email}
                             onChange={setEmail}
                             errorMessage={errors.email}

@@ -5,7 +5,10 @@ import useAuth from "../../hooks/useAuth"
 // If the user is authenticated render the page
 // If not silently redirect to login
 export default function ProtectedRoute() {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, isLoading } = useAuth()
+
+  if (isLoading)
+    return null
 
   // replace is ued so the user can't click "back" to get to the protected page
   return isAuthenticated ? <Outlet /> : <Navigate to="/" replace />

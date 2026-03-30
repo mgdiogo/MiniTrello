@@ -27,7 +27,7 @@ export default function LoginPage() {
         e.preventDefault()
 
         try {
-            const response = await axiosInstance.post("/api/auth/login", { email, password })
+            const response = await axiosInstance.post("/auth/login", { email, password })
 
             login(response.data)
             navigate("/dashboard")
@@ -52,7 +52,7 @@ export default function LoginPage() {
                         icon={EmailIcon}
                         fieldLabel="Email Address"
                         fieldType="email"
-                        fieldPlaceholder="email@provider.com"
+                        fieldPlaceholder="your@email.com"
                         value={email}
                         onChange={setEmail}
                         errorMessage={errors.email}
